@@ -1,0 +1,39 @@
+package wordcount;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+public class WordCount {
+    public static void main(String[] args) {
+       Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Enter text or provide a file path to count words:");
+        String userInput = scanner.nextLine();
+        
+        int wordCount = 0;
+        
+        if (userInput.startsWith("file:")) {
+            // User provided a file path
+            String filePath = userInput.substring(5); // Remove "file:" prefix
+            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] words = line.split("\\s+|\\p{Punct}+");
+                    wordCount += words.length;
+                }
+            } catch (IOException e) {
+                System.err.println("Error reading the file: " + e.getMessage());
+                return;
+            }
+        } else {
+            // User entered text
+            String[] words = userInput.split("\\s+|\\p{Punct}+");
+            wordCount = words.length;
+        }
+        
+        System.out.println("Total word count: " + wordCount);
+        
+        scanner.close();
+    }
+}
+   
